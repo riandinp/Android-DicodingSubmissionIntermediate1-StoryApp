@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.add_story -> AddStoryActivity.start(this)
             R.id.logout -> showLogoutDialog()
+            R.id.open_map -> MapsActivity.start(this)
         }
         return super.onOptionsItemSelected(item)
     }

@@ -29,4 +29,5 @@
     <string name="user_not_found">Akun Tidak Ditemukan</string>
     <string name="error_empty_description">Deskripsi Tidak Boleh Kosong</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps">Maps</string>
 </resources>
