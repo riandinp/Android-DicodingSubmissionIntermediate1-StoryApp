@@ -30,4 +30,6 @@
     <string name="error_empty_description">Deskripsi Tidak Boleh Kosong</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="maps">Maps</string>
+    <string name="refresh">Refresh</string>
+    <string name="retry_text">Terdapat Masalah, Silahkan Refresh Kembali</string>
 </resources>

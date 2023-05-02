@@ -11,11 +11,11 @@ import retrofit2.http.*
 interface DicodingApiService {
 
     @GET("/v1/stories")
-    fun getStories(
+    suspend fun getStories(
         @Query("page") page: Int? = null,
         @Query("size") size: Int? = null,
         @Query("location") location: Int = 0
-    ): Call<GetStoriesResponse>
+    ): GetStoriesResponse
 
     @GET("/v1/stories/{userId}")
     fun getDetailStory(

@@ -9,13 +9,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.R
 import com.dicoding.storyapp.data.model.UserPreference
-import com.dicoding.storyapp.data.remote.response.StoryItem
 import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.utils.dataStore
-import com.dicoding.storyapp.view.ViewModelFactory
+import com.dicoding.storyapp.view.adapter.LoadingStoryAdapter
 import com.dicoding.storyapp.view.adapter.StoryAdapter
 import com.dicoding.storyapp.view.addstory.AddStoryActivity
 import com.dicoding.storyapp.view.login.LoginActivity
@@ -26,16 +27,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainViewModel by viewModels<MainViewModel> {
-        ViewModelFactory(UserPreference.getInstance(dataStore))
+        MainViewModel.ViewModelFactory(
+            UserPreference.getInstance(dataStore)
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupView()
-        setupViewModel()
         binding.root.setOnRefreshListener {
             setupView()
         }
@@ -75,32 +77,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupView() {
         binding.root.isRefreshing = false
-        mainViewModel.getStories()
+        binding.rvStory.layoutManager = LinearLayoutManager(this)
+        setRecycleView()
     }
 
-    private fun setupViewModel() {
-        mainViewModel.listStory.observe(this) {
-            setRecycleView(it)
-        }
-        mainViewModel.loadingScreen.observe(this) {
-            showLoading(it)
-        }
-    }
+    private fun setRecycleView() {
+        val storyAdapter = StoryAdapter()
+        binding.rvStory.apply {
+            setHasFixedSize(true)
+            adapter = storyAdapter.withLoadStateFooter(
+                footer = LoadingStoryAdapter {
+                    storyAdapter.retry()
+                }
+            )
 
-    private fun showLoading(value: Boolean) {
-        binding.pbLoadingScreen.isVisible = value
-        binding.rvStory.isVisible = !value
-    }
+            lifecycleScope.launchWhenCreated {
+                mainViewModel.listStory.observe(this@MainActivity) {
+                    storyAdapter.submitData(lifecycle, it)
+                }
+            }
 
-    private fun setRecycleView(list: List<StoryItem>) {
-        with(binding) {
-            val manager = LinearLayoutManager(this@MainActivity)
-            rvStory.apply {
-                adapter = StoryAdapter(list)
-                layoutManager = manager
+            storyAdapter.addLoadStateListener { loadstate ->
+                binding.apply {
+                    pbLoadingScreen.isVisible = loadstate.source.refresh is LoadState.Loading
+                }
             }
         }
     }
+
+
 
     companion object {
         @JvmStatic
