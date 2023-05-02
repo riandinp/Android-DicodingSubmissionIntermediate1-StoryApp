@@ -1,4 +1,4 @@
-package com.dicoding.storyapp.data.model
+package com.dicoding.storyapp.data.pref
 
 data class UserModel(
     val tokenAuth: String,

@@ -17,16 +17,11 @@ class LoadingStoryAdapter(private val retry: () -> Unit) :
         private val binding = ItemLoadingBinding.bind(itemView)
         init {
             binding.btnRefresh.setOnClickListener {
-                binding.btnRefresh.isVisible = false
-                binding.tvErrorMessage.isVisible = false
                 retry.invoke()
             }
         }
 
         fun bind(loadState: LoadState) {
-            if (loadState is LoadState.Error) {
-                binding.tvErrorMessage.text = loadState.error.localizedMessage
-            }
             binding.pbLoadingScreen.isVisible = loadState is LoadState.Loading
             binding.btnRefresh.isVisible = loadState is LoadState.Error
             binding.tvErrorMessage.isVisible = loadState is LoadState.Error

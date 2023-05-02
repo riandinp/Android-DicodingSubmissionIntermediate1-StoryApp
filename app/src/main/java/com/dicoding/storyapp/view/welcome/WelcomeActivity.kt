@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import com.dicoding.storyapp.data.model.UserPreference
+import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.databinding.ActivityWelcomeBinding
 import com.dicoding.storyapp.utils.Constant
 import com.dicoding.storyapp.utils.dataStore

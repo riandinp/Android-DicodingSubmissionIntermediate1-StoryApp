@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.dicoding.storyapp.R
-import com.dicoding.storyapp.data.model.UserPreference
+import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.databinding.ActivityLoginBinding
 import com.dicoding.storyapp.utils.dataStore
 import com.dicoding.storyapp.view.ViewModelFactory

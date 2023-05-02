@@ -36,7 +36,7 @@ class DetailStoryViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null && !responseBody.error) {
-                        _detailStory.value = responseBody.story ?: StoryItem()
+                        _detailStory.value = responseBody.story as StoryItem
                         Log.d(TAG, responseBody.message.toString())
                     }
                 } else {

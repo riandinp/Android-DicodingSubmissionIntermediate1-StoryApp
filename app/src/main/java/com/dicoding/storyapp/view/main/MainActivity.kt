@@ -8,12 +8,10 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.R
-import com.dicoding.storyapp.data.model.UserPreference
+import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.utils.dataStore
 import com.dicoding.storyapp.view.adapter.LoadingStoryAdapter
@@ -28,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private val mainViewModel by viewModels<MainViewModel> {
         MainViewModel.ViewModelFactory(
+            this,
             UserPreference.getInstance(dataStore)
         )
     }
@@ -36,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupView()
         binding.root.setOnRefreshListener {
             setupView()
@@ -86,20 +84,12 @@ class MainActivity : AppCompatActivity() {
         binding.rvStory.apply {
             setHasFixedSize(true)
             adapter = storyAdapter.withLoadStateFooter(
-                footer = LoadingStoryAdapter {
-                    storyAdapter.retry()
-                }
+                footer = LoadingStoryAdapter { storyAdapter.retry() }
             )
 
             lifecycleScope.launchWhenCreated {
                 mainViewModel.listStory.observe(this@MainActivity) {
                     storyAdapter.submitData(lifecycle, it)
-                }
-            }
-
-            storyAdapter.addLoadStateListener { loadstate ->
-                binding.apply {
-                    pbLoadingScreen.isVisible = loadstate.source.refresh is LoadState.Loading
                 }
             }
         }

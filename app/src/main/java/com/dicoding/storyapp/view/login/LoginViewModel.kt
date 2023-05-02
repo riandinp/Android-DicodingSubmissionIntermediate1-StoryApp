@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dicoding.storyapp.data.model.UserModel
-import com.dicoding.storyapp.data.model.UserPreference
+import com.dicoding.storyapp.data.pref.UserModel
+import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.data.remote.network.ApiConfig
 import com.dicoding.storyapp.data.remote.payload.LoginPayload
 import com.dicoding.storyapp.data.remote.response.ErrorResponse

@@ -29,8 +29,8 @@ class StoryAdapter : PagingDataAdapter<StoryItem, StoryAdapter.ViewHolder>(DIFF_
                 itemView.setOnClickListener {
                     DetailStoryActivity.start(
                         itemView.context,
-                        item.photoUrl as String,
-                        item.id as String,
+                        item.photoUrl,
+                        item.id,
                         Pair(ivItemPhoto, "ivItemPhoto")
                     )
                 }
@@ -55,11 +55,10 @@ class StoryAdapter : PagingDataAdapter<StoryItem, StoryAdapter.ViewHolder>(DIFF_
     private companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StoryItem>() {
             override fun areItemsTheSame(oldItem: StoryItem, newItem: StoryItem): Boolean =
-                oldItem.id == newItem.id
-
+                oldItem == newItem
 
             override fun areContentsTheSame(oldItem: StoryItem, newItem: StoryItem): Boolean =
-                oldItem == newItem
+                oldItem.id == newItem.id
         }
     }
 }
