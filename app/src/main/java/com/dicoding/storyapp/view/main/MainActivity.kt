@@ -18,6 +18,7 @@ import com.dicoding.storyapp.view.adapter.LoadingStoryAdapter
 import com.dicoding.storyapp.view.adapter.StoryAdapter
 import com.dicoding.storyapp.view.addstory.AddStoryActivity
 import com.dicoding.storyapp.view.login.LoginActivity
+import com.dicoding.storyapp.view.maps.MapsActivity
 import kotlinx.coroutines.launch
 
 

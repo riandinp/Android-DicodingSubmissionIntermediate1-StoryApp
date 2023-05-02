@@ -17,6 +17,13 @@ interface DicodingApiService {
         @Query("location") location: Int = 0
     ): GetStoriesResponse
 
+    @GET("/v1/stories")
+    fun getStoriesWithLocation(
+        @Query("page") page: Int? = null,
+        @Query("size") size: Int? = null,
+        @Query("location") location: Int = 1
+    ): Call<GetStoriesResponse>
+
     @GET("/v1/stories/{userId}")
     fun getDetailStory(
         @Path("userId") userId: String
