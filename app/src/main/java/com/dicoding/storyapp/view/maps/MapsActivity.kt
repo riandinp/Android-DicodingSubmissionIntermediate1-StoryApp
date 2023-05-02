@@ -6,6 +6,8 @@ import android.content.res.Resources
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -40,6 +42,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title = "Story With Location"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setupObserver()
 
@@ -68,6 +71,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isMapToolbarEnabled = true
 
         setMapStyle()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home) {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        onBackPressedDispatcher.addCallback {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setMapStyle() {
@@ -109,7 +122,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         listStory.forEach { story ->
             val latLng = LatLng(story.lat as Double, story.lon as Double)
             val addressName = getAddressName(story.lat, story.lon)
-            mMap.addMarker(MarkerOptions().position(latLng).title(story.name).snippet(addressName ?:"Alamat tidak diketahui"))
+            mMap.addMarker(
+                MarkerOptions().position(latLng).title(story.name)
+                    .snippet(addressName ?: "Alamat tidak diketahui")
+            )
             boundsBuilder.include(latLng)
         }
 
