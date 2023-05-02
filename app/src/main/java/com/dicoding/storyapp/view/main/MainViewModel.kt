@@ -11,31 +11,25 @@ import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.data.remote.response.StoryItem
 import com.dicoding.storyapp.data.repository.StoryRepository
 import com.dicoding.storyapp.di.Injection
-import kotlinx.coroutines.launch
 
-class MainViewModel(private val pref: UserPreference, repository: StoryRepository) : ViewModel() {
+class MainViewModel(repository: StoryRepository) : ViewModel() {
 
+    private lateinit var preferences: UserPreference
     val listStory: LiveData<PagingData<StoryItem>> =
         repository.getStories().cachedIn(viewModelScope)
 
-    class ViewModelFactory(private val context: Context, private val pref: UserPreference) :
+
+    class ViewModelFactory(private val context: Context) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             return when {
                 modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                    MainViewModel(pref, Injection.provideRepository(context)) as T
+                    MainViewModel(Injection.provideRepository(context)) as T
                 }
 
                 else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
             }
         }
     }
-
-    fun logout() {
-        viewModelScope.launch {
-            pref.logout()
-        }
-    }
-
 }

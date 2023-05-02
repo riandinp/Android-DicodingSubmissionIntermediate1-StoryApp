@@ -18,16 +18,17 @@ import com.dicoding.storyapp.view.adapter.LoadingStoryAdapter
 import com.dicoding.storyapp.view.adapter.StoryAdapter
 import com.dicoding.storyapp.view.addstory.AddStoryActivity
 import com.dicoding.storyapp.view.login.LoginActivity
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val preferences = UserPreference.getInstance(dataStore)
 
     private val mainViewModel by viewModels<MainViewModel> {
         MainViewModel.ViewModelFactory(
-            this,
-            UserPreference.getInstance(dataStore)
+            this
         )
     }
 
@@ -68,7 +69,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logout() {
-        mainViewModel.logout()
+        lifecycleScope.launch {
+            preferences.logout()
+        }
         LoginActivity.start(this)
         finish()
     }
